@@ -46,8 +46,8 @@ int main(void) {
       currDir = opendir(".");
       struct dirent *aDir;
       struct stat dirStat;
-      char *movieTitle;
       int filesize = 0;
+      char *movieTitle;
 
       // Go through all the entries
       while((aDir = readdir(currDir)) != NULL)
@@ -56,30 +56,36 @@ int main(void) {
         // Find file that has the Prefix "movies_"
         if(strncmp(PREFIX, aDir->d_name, strlen(PREFIX)) == 0)
         {
+          stat(aDir->d_name, &dirStat);
+          int size = dirStat.st_size;
+          printf("The size of the file is: %d\n", size);
           // Find file with extension csv
           // Set delimiter to a dot to split file name and file type
           char* token = strtok(aDir->d_name, ".");
           // name of file without extension
-          printf("File name is: %s", token);
+          printf("File name is: %s\n", token);
           // end of the string
           token = strtok(NULL, " ");
           // the file type
-          printf("the file type is %s", token);
+          printf("the file type is %s\n", token);
           // Checks if the file type is csv
           if (strcmp(token, "csv") == 0)
           {
             // Get meta-data for the current entry
-            stat(aDir->d_name, &dirStat);
+            //stat(aDir->d_name, &dirStat);
+            //int size = dirStat.st_size;
+            //printf("The size of the file is: %d\n", size);
+            
             // Find the largest file
-            if (filesize < dirStat.st_size)
+            if (filesize <= size)
             {
-              // Read-only portion of the Data Segment
-              movieTitle = aDir->d_name;
+
             }
           }
         }
-        printf("Now processing the chosen file named %s", movieTitle);
+        
       }
+      printf("Now processing the chosen file named %s", movieTitle);
       // Close Directory
       closedir(currDir);
       break;
