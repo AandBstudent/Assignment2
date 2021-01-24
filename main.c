@@ -100,11 +100,13 @@ int main(void) {
         char *str = malloc(length+1);
         snprintf(str, length + 1, "%ld", randomNum);
         strcat(src, str);
-        printf("%s\n", src);
-        // Print a message with the name of the directory that was created
+        const char *pathname = src;
         // Make a new directory
+        mkdir(pathname, 0750);
         // renaudtp.movies.randomnumber
         // With permissions rwxr-x--- / 0750
+        // Print a message with the name of the directory that was created
+        printf("Directory %s has been created.\n", src);
         
         fileFound = 1;
         // Close Directory
