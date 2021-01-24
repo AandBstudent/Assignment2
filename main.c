@@ -165,8 +165,6 @@ int main(void) {
         }
       }
       break;
-    default:
-      break;
   }
   return 0;
 }
