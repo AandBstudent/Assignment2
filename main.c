@@ -151,17 +151,18 @@ int main(void) {
       // Open Current Directory
       currDir = opendir(".");
       struct dirent *aDirF;
-      // Get the dudes order or something
-      char *dudesOrder;
-      printf("What file are you looking for dude?\n");
-      scanf("%s", dudesOrder);
+      char movieFind[30];
+      printf("What file are you looking for?\n");
+      scanf("%s", movieFind);
       // Go through all the entries
       while((aDirF = readdir(currDir)) != NULL)
       {
+        // Prints file names
+        // printf("%s\n", aDirF->d_name);
         // Find file with the same name
-        if (strcmp(dudesOrder,aDirF->d_name) == 0)
+        if (strcmp(movieFind,aDirF->d_name) == 0)
         {
-          
+          printf("Now processing the chosen file named %s\n",movieFind);
         }
       }
       break;
