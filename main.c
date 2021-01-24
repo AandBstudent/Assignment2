@@ -148,6 +148,8 @@ int main(void) {
       // Program checks if this file exists in the current directory
       // If the file is not found, print an error message
       // and repeat the instructions about picking a file.
+      // Open Current Directory
+      currDir = opendir(".");
       break;
     default:
       break;
