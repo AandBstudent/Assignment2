@@ -8,8 +8,6 @@
 #define PREFIX "movies_"
 #define POSTFIX "csv"
 
-
-
 int main(void) {
   DIR* currDir;
   int choice;
@@ -89,6 +87,25 @@ int main(void) {
           }
         }
         printf("Now processing the chosen file named %s.csv\n", movieTitle);
+        // Create the name of the file
+        char fileName[256];
+        char src[10];
+        char dest[10];
+        char num[11];
+        strcpy(src, "renaudtp");
+        strcpy(dest, ".movies.");
+        strcat(src, dest);        
+        long int randomNum = random();
+        int length = snprintf(NULL, 0, "%ld", randomNum);
+        char *str = malloc(length+1);
+        snprintf(str, length + 1, "%ld", randomNum);
+        strcat(src, str);
+        printf("%s\n", src);
+        // Print a message with the name of the directory that was created
+        // Make a new directory
+        // renaudtp.movies.randomnumber
+        // With permissions rwxr-x--- / 0750
+        
         fileFound = 1;
         // Close Directory
         closedir(currDir);
