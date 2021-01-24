@@ -24,7 +24,7 @@ int main(void) {
       printf("Enter 1 to pick the largest file\n");
       printf("Enter 2 to pick the smallest file\n");
       printf("Enter 3 to specify the name of a file\n");
-      printf("Enter a choice from 1 to 3:");
+      printf("Enter a choice from 1 to 3: ");
       scanf("%d", &filechoice);
       break;
     case 2:
@@ -58,16 +58,16 @@ int main(void) {
         {
           stat(aDir->d_name, &dirStat);
           int size = dirStat.st_size;
-          printf("The size of the file is: %d\n", size);
+          //printf("The size of the file is: %d\n", size);
           // Find file with extension csv
           // Set delimiter to a dot to split file name and file type
           char* token = strtok(aDir->d_name, ".");
           // name of file without extension
-          printf("File name is: %s\n", token);
+          //printf("File name is: %s\n", token);
           // end of the string
           token = strtok(NULL, " ");
           // the file type
-          printf("the file type is %s\n", token);
+          //printf("the file type is %s\n", token);
           // Checks if the file type is csv
           if (strcmp(token, "csv") == 0)
           {
@@ -79,13 +79,13 @@ int main(void) {
             // Find the largest file
             if (filesize <= size)
             {
-
+              filesize = size;
+              movieTitle = aDir->d_name;
             }
           }
         }
-        
       }
-      printf("Now processing the chosen file named %s", movieTitle);
+      printf("Now processing the chosen file named %s.csv\n", movieTitle);
       // Close Directory
       closedir(currDir);
       break;
@@ -93,6 +93,55 @@ int main(void) {
       // Program finds the smalles file with the extension csv 
       // in the current directory whose name start wityh the
       // Prefix "movies_" and automatically process it
+      // Program finds the largest file with the extension csv
+      // in the current directory whose name starts with the 
+      // Prefix "movies_" and automatically process it
+      // Open Current Directory
+      currDir = opendir(".");
+      struct dirent *aDirS;
+      struct stat dirStatS;
+      int filesizeS = 1000000000;
+      char *movieTitleS;
+
+      // Go through all the entries
+      while((aDirS = readdir(currDir)) != NULL)
+      {
+        
+        // Find file that has the Prefix "movies_"
+        if(strncmp(PREFIX, aDirS->d_name, strlen(PREFIX)) == 0)
+        {
+          stat(aDirS->d_name, &dirStat);
+          int size = dirStatS.st_size;
+          //printf("The size of the file is: %d\n", size);
+          // Find file with extension csv
+          // Set delimiter to a dot to split file name and file type
+          char* token = strtok(aDirS->d_name, ".");
+          // name of file without extension
+          //printf("File name is: %s\n", token);
+          // end of the string
+          token = strtok(NULL, " ");
+          // the file type
+          //printf("the file type is %s\n", token);
+          // Checks if the file type is csv
+          if (strcmp(token, "csv") == 0)
+          {
+            // Get meta-data for the current entry
+            //stat(aDir->d_name, &dirStat);
+            //int size = dirStat.st_size;
+            //printf("The size of the file is: %d\n", size);
+            
+            // Find the largest file
+            if (filesizeS >= size)
+            {
+              filesizeS = size;
+              movieTitleS = aDirS->d_name;
+            }
+          }
+        }
+      }
+      printf("Now processing the chosen file named %s.csv\n", movieTitleS);
+      // Close Directory
+      closedir(currDir);
       break;
     case 3:
       // Program asks the user to enter the name of a file
