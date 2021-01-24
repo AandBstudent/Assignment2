@@ -150,6 +150,20 @@ int main(void) {
       // and repeat the instructions about picking a file.
       // Open Current Directory
       currDir = opendir(".");
+      struct dirent *aDirF;
+      // Get the dudes order or something
+      char *dudesOrder;
+      printf("What file are you looking for dude?\n");
+      scanf("%s", dudesOrder);
+      // Go through all the entries
+      while((aDirF = readdir(currDir)) != NULL)
+      {
+        // Find file with the same name
+        if (strcmp(dudesOrder,aDirF->d_name) == 0)
+        {
+          
+        }
+      }
       break;
     default:
       break;
