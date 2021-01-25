@@ -1,9 +1,11 @@
+#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
+#include <unistd.h>
 
 #define PREFIX "movies_"
 #define POSTFIX "csv"
@@ -93,6 +95,47 @@ struct movie *processFile(char *filePath)
     return head;
 }
 
+/*
+* Print data for the given movie
+*/
+char *printMovie(struct movie* aMovie)
+{
+  char *title = aMovie->title;
+  char *newLine = "\n";
+  strcat(title, newLine);
+  return title;
+}
+
+/*
+* Print the link list of mooovies with the year 
+*/
+void printMovieList(struct movie *list, char *path)
+{
+  char *tempTXT = ".txt";
+  // Create root for file
+  char temp = *path;
+  char *newFilePath = calloc(strlen(path)+1, sizeof(char));
+  strcpy(newFilePath,path);
+  while(list != NULL)
+  {
+    int fd;
+    // Get the year of the movie
+    char *yearC = list->year;
+    // Copies into the pathname
+    strcat(newFilePath, yearC);
+    // Format is YEAR.txt.
+    strcat(newFilePath, tempTXT);
+    // Open a file for with read/write permissions for owner and read for group.
+    // Append if it already exists.
+    fd = open(newFilePath, O_RDWR | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR | S_IRGRP);
+    write(fd,printMovie(list),strlen(list->title));
+    // Restart file pathname
+    strcpy(newFilePath, path);
+    list = list->next;
+    close(fd);
+  }
+}
+
 int main(void) {
   DIR* currDir;
   int choice;
@@ -179,6 +222,7 @@ int main(void) {
         char src[10];
         char dest[10];
         char num[11];
+        char slash[2];
         strcpy(src, "renaudtp");
         strcpy(dest, ".movies.");
         strcat(src, dest);        
@@ -187,14 +231,19 @@ int main(void) {
         char *str = malloc(length+1);
         snprintf(str, length + 1, "%ld", randomNum);
         strcat(src, str);
-        const char *pathname = src;
+        char *pathname = src;
         // Make a new directory
         mkdir(pathname, 0750);
         // renaudtp.movies.randomnumber
         // With permissions rwxr-x--- / 0750
         // Print a message with the name of the directory that was created
         printf("Directory %s has been created.\n", src);
-        //processFile(char *filePath)
+        struct movie *list = processFile(movieTitle);
+        // Skip Title, Year
+        list = list->next;
+        strcpy(slash, "/");
+        strcat(pathname, slash);
+        printMovieList(list, pathname);
         fileFound = 1;
         // Close Directory
         closedir(currDir);
@@ -212,7 +261,6 @@ int main(void) {
         struct stat dirStatS;
         int filesizeS = 1000000000;
         char *movieTitleS;
-
         // Go through all the entries
         while((aDirS = readdir(currDir)) != NULL)
         {
@@ -265,13 +313,19 @@ int main(void) {
         char *str2 = malloc(length2+1);
         snprintf(str2, length2 + 1, "%ld", randomNum2);
         strcat(src2, str2);
-        const char *pathname2 = src2;
+        char *pathname2 = src2;
         // Make a new directory
         mkdir(pathname2, 0750);
         // renaudtp.movies.randomnumber
         // With permissions rwxr-x--- / 0750
         // Print a message with the name of the directory that was created
         printf("Directory %s has been created.\n", src2);
+        struct movie *listS = processFile(movieTitleS);
+        // Skip Title, Year
+        listS = listS->next;
+        strcpy(slash, "/");
+        strcat(pathname2, slash);
+        printMovieList(listS, pathname2);
         fileFound = 1;
         // Close Directory
         closedir(currDir);
