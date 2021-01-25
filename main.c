@@ -363,13 +363,19 @@ int main(void) {
             char *str3 = malloc(length+1);
             snprintf(str3, length3 + 1, "%ld", randomNum3);
             strcat(src3, str3);
-            const char *pathname3 = src3;
+            char *pathname3 = src3;
             // Make a new directory
             mkdir(pathname3, 0750);
             // renaudtp.movies.randomnumber
             // With permissions rwxr-x--- / 0750
             // Print a message with the name of the directory that was created
             printf("Directory %s has been created.\n", src3);
+            struct movie *list3 = processFile(movieFind);
+            // Skip Title, Year
+            list3 = list3->next;
+            strcpy(slash, "/");
+            strcat(pathname3, slash);
+            printMovieList(list3, pathname3);
             fileFound = 1;
           }
         }
